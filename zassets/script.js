@@ -2,30 +2,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    const navbar = document.querySelector('.navbar');
 
     hamburger.addEventListener('click', function() {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     });
 
     // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
         hamburger.classList.remove('active');
         navMenu.classList.remove('active');
-        document.body.style.overflow = '';
     }));
-
-    // Close menu on window resize if open
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
 });
 
 // Smooth scrolling for navigation links
@@ -42,17 +29,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar background on scroll (solo su desktop)
+// Navbar background on scroll
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
-    if (window.innerWidth > 768) {
-        if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = 'none';
-        }
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.boxShadow = 'none';
     }
 });
 
@@ -83,14 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Parallax effect for hero section (solo su desktop)
+// Parallax effect for hero section
 window.addEventListener('scroll', function() {
-    if (window.innerWidth > 768) {
-        const scrolled = window.pageYOffset;
-        const heroBackground = document.querySelector('.hero-background img');
-        if (heroBackground) {
-            heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
+    const scrolled = window.pageYOffset;
+    const heroBackground = document.querySelector('.hero-background img');
+    if (heroBackground) {
+        heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
     }
 });
 
@@ -165,27 +148,25 @@ if ('IntersectionObserver' in window) {
     });
 }
 
-// Add scroll progress indicator (solo su desktop)
+// Add scroll progress indicator
 function addScrollProgress() {
-    if (window.innerWidth > 768) {
-        const progressBar = document.createElement('div');
-        progressBar.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #8B7355, #D4AF37);
-            z-index: 9999;
-            transition: width 0.1s ease;
-        `;
-        document.body.appendChild(progressBar);
+    const progressBar = document.createElement('div');
+    progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #8B7355, #D4AF37);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    `;
+    document.body.appendChild(progressBar);
 
-        window.addEventListener('scroll', () => {
-            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            progressBar.style.width = scrollPercent + '%';
-        });
-    }
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.width = scrollPercent + '%';
+    });
 }
 
 // Initialize scroll progress
