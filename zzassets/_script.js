@@ -28,6 +28,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Calculate navbar height dynamically on mobile
+function updateNavbarHeight() {
+    const navbar = document.querySelector('.navbar');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (window.innerWidth <= 768) {
+        const navbarHeight = navbar.offsetHeight;
+        navMenu.style.top = navbarHeight + 'px';
+        navMenu.style.maxHeight = `calc(100vh - ${navbarHeight}px)`;
+        
+        // Update hero padding
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            hero.style.paddingTop = `calc(${navbarHeight}px + 1.5rem)`;
+        }
+        
+        // Update scroll padding
+        document.documentElement.style.scrollPaddingTop = navbarHeight + 'px';
+    }
+}
+
+// Call on load and resize
+window.addEventListener('load', updateNavbarHeight);
+window.addEventListener('resize', updateNavbarHeight);
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -42,17 +67,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar background on scroll (solo su desktop)
+// Navbar background on scroll
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
-    if (window.innerWidth > 768) {
-        if (window.scrollY > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
-            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-        } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            navbar.style.boxShadow = 'none';
-        }
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.boxShadow = 'none';
     }
 });
 
@@ -83,14 +106,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Parallax effect for hero section (solo su desktop)
+// Parallax effect for hero section
 window.addEventListener('scroll', function() {
-    if (window.innerWidth > 768) {
-        const scrolled = window.pageYOffset;
-        const heroBackground = document.querySelector('.hero-background img');
-        if (heroBackground) {
-            heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
-        }
+    const scrolled = window.pageYOffset;
+    const heroBackground = document.querySelector('.hero-background img');
+    if (heroBackground) {
+        heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
     }
 });
 
@@ -165,29 +186,70 @@ if ('IntersectionObserver' in window) {
     });
 }
 
-// Add scroll progress indicator (solo su desktop)
+// Add scroll progress indicator
 function addScrollProgress() {
-    if (window.innerWidth > 768) {
-        const progressBar = document.createElement('div');
-        progressBar.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #8B7355, #D4AF37);
-            z-index: 9999;
-            transition: width 0.1s ease;
-        `;
-        document.body.appendChild(progressBar);
+    const progressBar = document.createElement('div');
+    progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #8B7355, #D4AF37);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    `;
+    document.body.appendChild(progressBar);
 
-        window.addEventListener('scroll', () => {
-            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-            progressBar.style.width = scrollPercent + '%';
-        });
-    }
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.width = scrollPercent + '%';
+    });
 }
 
 // Initialize scroll progress
 document.addEventListener('DOMContentLoaded', addScrollProgress);
 
+/* ── Aggiorna dinamicamente l'altezza della navbar ── */
+function syncNavHeight() {
+    const nav = document.querySelector('.navbar');
+    if (!nav) return;
+    const h = nav.getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--nav-h-mobile', `${h}px`);
+  }
+  
+  /* esegui a caricamento pagina e ad ogni resize/orientamento */
+  window.addEventListener('load',   syncNavHeight);
+  window.addEventListener('resize', syncNavHeight);
+
+  function syncNavHeight(){
+    const h = document.querySelector('.navbar').getBoundingClientRect().height;
+    document.documentElement.style.setProperty('--nav-h-mobile', h + 'px');
+  }
+  window.addEventListener('load',   syncNavHeight);
+  window.addEventListener('resize', syncNavHeight);
+
+  function setDynamicOffsets(){
+    const nav  = document.querySelector('.navbar');
+    const hero = document.querySelector('.hero');
+    if (!nav || !hero) return;
+  
+    // altezza effettiva della barra
+    const h = nav.getBoundingClientRect().height;
+  
+    // aggiorna la custom property usata nel CSS
+    document.documentElement.style.setProperty('--nav-h-mobile', `${h}px`);
+  
+    // spazio interno all’hero
+    hero.style.paddingTop = `calc(${h}px + 1.5rem)`;
+  
+    // offset per gli anchor-link (#festival, #programma…)
+    document.documentElement.style.scrollPaddingTop = `${h}px`;
+  }
+  
+  // al primo caricamento e a ogni resize/orientamento
+  window.addEventListener('DOMContentLoaded', setDynamicOffsets);
+  window.addEventListener('resize',          setDynamicOffsets);
+  
+  
+  
