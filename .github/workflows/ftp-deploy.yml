@@ -1,21 +1,8 @@
-name: Deploy site via FTP
-
-on:
-  push:
-    branches:
-      - main   # oppure la branch che pubblichi (es: fix-mobile2)
-
-jobs:
-  ftp-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Deploy to FTP server
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5 
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        port: ${{ secrets.FTP_PORT }}
-        local-dir: ./
-        server-dir: ${{ secrets.FTP_DESTINATION }}
+- name: Deploy to FTP server
+  uses: SamKirkland/FTP-Deploy-Action@v4
+  with:
+    server: ${{ secrets.FTP_SERVER }}
+    username: ${{ secrets.FTP_USERNAME }}
+    password: ${{ secrets.FTP_PASSWORD }}   # <— deve arrivare non-vuoto
+    server-dir: ${{ secrets.FTP_DESTINATION }}
+    local-dir: ./
