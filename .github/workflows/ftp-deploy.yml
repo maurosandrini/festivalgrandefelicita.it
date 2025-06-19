@@ -1,3 +1,9 @@
+
+- name: debug env
+  run: echo "PW length=${#FTP_PASSWORD}"
+  env:
+    FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+
 - name: Deploy to FTP server
   uses: SamKirkland/FTP-Deploy-Action@v4
   with:
