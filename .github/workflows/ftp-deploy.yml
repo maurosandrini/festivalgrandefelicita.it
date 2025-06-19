@@ -9,9 +9,9 @@ jobs:
   ftp-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: SamKirkland/FTP-Deploy-Action@v5
+    - uses: actions/checkout@v4
     - name: Deploy to FTP server
-      uses: SamKirkland/FTP-Deploy-Action@v4
+      uses: uses: SamKirkland/ftp-deploy-action@v5
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
@@ -19,4 +19,3 @@ jobs:
         port: ${{ secrets.FTP_PORT }}
         local-dir: ./
         server-dir: ${{ secrets.FTP_DESTINATION }}
-
