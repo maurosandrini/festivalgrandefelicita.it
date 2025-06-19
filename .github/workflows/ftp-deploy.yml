@@ -1,16 +1,23 @@
+name: Deploy site via FTP
+
+on:                     # <— qui definiamo l’evento
+  push:
+    branches:
+      - main            # o la branch che pubblichi
+
 jobs:
   ftp-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # debug: stampa la lunghezza della password
+      # debug: stampa lunghezza della password
       - name: debug env
         run: echo "PW length=${#FTP_PASSWORD}"
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
-      # deploy
+      # deploy FTP
       - name: Deploy to FTP server
         uses: SamKirkland/FTP-Deploy-Action@v4
         with:
