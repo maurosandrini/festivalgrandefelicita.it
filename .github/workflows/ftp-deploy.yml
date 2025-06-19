@@ -1,14 +1,22 @@
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-- name: debug env
-  run: echo "PW length=${#FTP_PASSWORD}"
-  env:
-    FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      # debug: stampa la lunghezza della password
+      - name: debug env
+        run: echo "PW length=${#FTP_PASSWORD}"
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
 
-- name: Deploy to FTP server
-  uses: SamKirkland/FTP-Deploy-Action@v4
-  with:
-    server: ${{ secrets.FTP_SERVER }}
-    username: ${{ secrets.FTP_USERNAME }}
-    password: ${{ secrets.FTP_PASSWORD }}   # <— deve arrivare non-vuoto
-    server-dir: ${{ secrets.FTP_DESTINATION }}
-    local-dir: ./
+      # deploy
+      - name: Deploy to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_DESTINATION }}
